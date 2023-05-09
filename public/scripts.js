@@ -10,15 +10,24 @@ function showHideShots() {
 	let rps = document.getElementById("rps");
 	let rpsls = document.getElementById("rpsls");
 // Check if the checkbox is checked and show or hide options accordingly
-	if (checkOP.checked == true) {
-		if (rps.checked == true) {
-			$("rpsMoves").show();
-		} else if (rpsls.checked == true) {
-			$("rpslsMoves").show();
+	if (rps.checked == true || rpsls.checked == true) {
+		if (checkOP.checked == true) {
+			if (rps.checked == true) {
+				$("rpsMoves").show();
+				$("playGame").show();
+			} else if (rpsls.checked == true) {
+				$("rpslsMoves").show();
+				$("playGame").show();
+			}
+		} else {
+			$("rpslsMoves").hide();
+			$("rpsMoves").hide();
+			$("playGame").show();
 		}
 	} else {
 		$("rpslsMoves").hide();
 		$("rpsMoves").hide();
+		$("playGame").hide();
 	}
 }
 // This function clears the input form and also resets the shot selection
@@ -26,6 +35,7 @@ function showHideShots() {
 function startOver() {
 	document.getElementById("userinput").reset();
 	showHideShots();
+	document.getElementById("rulebook").hide();
 	startUp();
 }
 
@@ -57,8 +67,13 @@ async function playGame() {
 }
 
 function ruleBook() {
-	let rules = document.getElementById("rulebook");
-	if (rules.checked == true) {
-		$("rulebook").show();
-	}
+	document.getElementById("rulebook").show();
+	let rulesRPS = document.getElementById("rpsRules");
+	let rulesRPSLS = document.getElementById("rpslsRules");
+	
+	if (rulesRPS.checked == true) {
+		$("rpsBook").show();
+	} else if (rulesRPSLS.checked == true) {
+		$("rpslsBook").show();
+	}	
 }
