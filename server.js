@@ -96,7 +96,7 @@ let startlog = new Date().toISOString() + ' HTTP server started on port ' + port
 // Debug echo start log entry to STDOUT
 if (args.debug) {
     console.info(startlog)
-}
+} 
 // Log server start to file
 fs.appendFileSync(path.join(logpath, 'server.log'), startlog)
 // Exit gracefully and log
