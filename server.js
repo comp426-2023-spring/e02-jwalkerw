@@ -38,8 +38,7 @@ It also creates logs in a common log format (CLF) so that you can better.
     process.exit(0)
 } 
 // Load express and other dependencies for serving HTML, CSS, and JS files
-import express from 'express'
-import { rps, rpsls } from './lib/rpsls.js';
+import express from 'express';
 // Use CJS __filename and __dirname in ES module scope
 // https://flaviocopes.com/fix-dirname-not-defined-es-module-scope/
 import path from 'path'
@@ -63,7 +62,25 @@ const app = express()
 // Set a port for the server to listen on
 const port = args.port || args.p || process.env.PORT || 8080
 // Load app middleware here to serve routes, accept data requests, etc.
-//
+import { rps, rpsls } from './lib/rpsls.js';
+
+// Code from a04
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+
+// Endpoints and Plays
+app.get('/app/', (req, res) => { res.status(200).send("200 OK"); });
+app.get('/app/rps/', (req, res) => { res.status(200).send(rps()); });
+app.get('/app/rpsls/', (req, res) => { res.status(200).send(rpsls()); });
+// RPS
+app.get('/app/rps/play/', (req, res) => { res.status(200).send(rps(req.query.shot)); });
+app.post('/app/rps/play/', (req, res) => { res.status(200).send(rps(req.body.shot)); });
+app.get('/app/rps/play/:shot/', (req, res) => { res.status(200).send(rps(req.params.shot)); });
+// RPSLS
+app.get('/app/rpsls/play/', (req, res) => { res.status(200).send(rpsls(req.query.shot)); });
+app.post('/app/rpsls/play/', (req, res) => { res.status(200).send(rpsls(req.body.shot)); });
+app.get('/app/rpsls/play/:shot/', (req, res) => { res.status(200).send(rpsls(req.params.shot)); });
+
 // Create and update access log
 // The morgan format below is the Apache Foundation combined format but with ISO8601 dates
 app.use(morgan(':remote-addr - :remote-user [:date[iso]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"',
@@ -72,25 +89,6 @@ app.use(morgan(':remote-addr - :remote-user [:date[iso]] ":method :url HTTP/:htt
 // Serve static files
 const staticpath = args.stat || args.s || process.env.STATICPATH || path.join(__dirname, 'public')
 app.use('/', express.static(staticpath))
-// Code from a04
-app.use(express.json());
-app.use(express.urlencoded({extended: true}));
-
-// Endpoints and Plays
-app.get('/app/', (req, res) => { res.status(200).send("200 OK"); });
-app.get('/app/rps', (req, res) => { res.status(200).send(rps()); });
-app.get('/app/rpsls', (req, res) => { res.status(200).send(rpsls()); });
-// RPS
-app.get('/app/rps/play', (req, res) => { res.status(200).send(rps(req.query.shot)); });
-app.post('/app/rps/play', (req, res) => { res.status(200).send(rps(req.body.shot)); });
-app.get('/app/rps/play/:shot', (req, res) => { res.status(200).send(rps(req.params.shot)); });
-// RPSLS
-app.get('/app/rpsls/play', (req, res) => { res.status(200).send(rpsls(req.query.shot)); });
-app.post('/app/rpsls/play', (req, res) => { res.status(200).send(rpsls(req.body.shot)); });
-app.get('/app/rpsls/play/:shot', (req, res) => { res.status(200).send(rpsls(req.params.shot)); });
-// Not found
-app.get('*', (req, res) => { res.status(400).send("404 NOT FOUND"); });
-
 // Create app listener
 const server = app.listen(port)
 // Create a log entry on start
@@ -98,7 +96,7 @@ let startlog = new Date().toISOString() + ' HTTP server started on port ' + port
 // Debug echo start log entry to STDOUT
 if (args.debug) {
     console.info(startlog)
-} 
+}
 // Log server start to file
 fs.appendFileSync(path.join(logpath, 'server.log'), startlog)
 // Exit gracefully and log
