@@ -16,12 +16,12 @@ function showHideShots() {
 }
 // This function clears the input form and also resets the shot selection
 // radio buttons. 
-function startOver () {
+function startOver() {
 	document.getElementById('userinput').reset();
 	showHideShots();
 }
 
-async function playGame () {
+async function playGame() {
 	// Get which game is being played based on the value in the form
 	let game = $('input[type=radio][name=game]:checked').val();
 	// Get which shot is being played based on the value in the form
@@ -36,7 +36,7 @@ async function playGame () {
 	// a conditional somewhere above in this function to construct the 
 	// correct URL
 	let url = baseurl + game + '/play/' + shot
-    // Log the full URL
+        // Log the full URL
 	console.log(url)	
 
 	let response = await fetch(url)
@@ -46,4 +46,8 @@ async function playGame () {
 	// Here you should include code that uses the DOM API or jQuery to 
 	// manipulate another block of HTML in the interface to display the 
 	// results in some way. 
+}
+
+function ruleBook() {
+	//fill in here
 }
